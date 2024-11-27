@@ -1,0 +1,3 @@
+/home/ays/3A/Calculparall_Para/CMakeFiles/CHP.dir
+/home/ays/3A/Calculparall_Para/CMakeFiles/edit_cache.dir
+/home/ays/3A/Calculparall_Para/CMakeFiles/rebuild_cache.dir
