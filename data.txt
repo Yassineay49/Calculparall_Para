@@ -6,6 +6,7 @@
 2.
 150
 150
+0.1
+0.1
 
-
-read(cas, xmin, xmax, ymin, ymax, Tf, Nx, Ny);
+read(cas, xmin, xmax, ymin, ymax, Tf, Nx, Ny, alpha_robin, beta_robin);

@@ -21,8 +21,9 @@ int main(int argc, char** argv){
     double dx, dy, Tf, xmin, ymin, dt;
     double t=0., xmax , ymax;
     int cas;
+    double alpha_robin, beta_robin, C ;
 
-    read(cas, xmin, xmax, ymin, ymax, Tf, Nx, Ny);
+    read(cas, xmin, xmax, ymin, ymax, Tf, Nx, Ny,alpha_robin, beta_robin);
 
     std::vector<double> u0_total((Nx-1)*(Ny-1), 10.0); // Initialisation de u 
     std::vector<double> Uf((Nx-1)*(Ny-1), 0.0);
@@ -30,28 +31,28 @@ int main(int argc, char** argv){
     std::vector<double> V((Nx-1)*(Ny-1), 0.0);
 
 
-
-    read(cas, xmin, xmax, ymin, ymax, Tf, Nx, Ny);
-
     dx = (xmax-xmin)/Nx ;
     dy = (ymax-ymin)/Ny ;
+    C = ( 2 * beta_robin * dy) / alpha_robin ;
 
-    printf("%d\n",cas);    
+    printf("%d\n",cas); 
 
-    // Uf = produitmatvect( Nx,  Ny,  dx,  dy,  xmin,  ymin,  dt,u0_total );
-    // B = Source_term(Nx, Ny, dx, dy,  xmin,  ymin, xmax,  ymax,  t,  cas);
 
-    int s=0;
-    for (int j = 0; j < Ny - 1; ++j) {
-        for (int i = 0; i < Nx - 1; ++i) {
-            
-            // printf("%f\n",Uf[s]);
-            // printf("%f\n",B[s]) ;
+    // Initialisation MPI
+    MPI_Init(&argc, &argv);
+    int Me, Np;
+    MPI_Comm_rank(MPI_COMM_WORLD, &Me);
+    MPI_Comm_size(MPI_COMM_WORLD, &Np);
 
-            s+=1;
-        }
-    }
-    
+    // Calcul des indices de début et de fin pour chaque processus MPI
+    int iBeg, iEnd;
+    int val = (Nx + 1) * (Ny + 1);
+    charge_a(Me, val, Np, iBeg, iEnd);
+
+
+    MPI_Status status;
+    int size_loc = iEnd - iBeg + 1;   
+
 
 
     int j=0 , Nmax=40, pas, lig;
@@ -61,13 +62,18 @@ int main(int argc, char** argv){
     Tf = 200 * dt ;
     t=0. ;
 
+    std::vector<double> vec1((Nx-1)*(size_loc-1), 0.0);
+    std::vector<double> vec2((Nx-1)*(size_loc-1), 0.0);
+    std::vector<double> vec3((Nx-1)*(size_loc-1), 0.0);
+
+
     while (t < Tf) {
 
 
         std::string nomFichier = "sol." + std::to_string(j) + ".dat";
         std::ofstream fichier(nomFichier);
 
-        B = Source_term(Nx, Ny, dx, dy,  xmin,  ymin, xmax,  ymax,  t,  dt, cas);
+        B = Source_term(Nx, Ny, dx, dy,  xmin,  ymin, xmax,  ymax,  t,  dt, cas, C, vec1, vec2, vec3, Me, Np);
         x= xmin +dx ;
         y=ymin +dy;
         pas = 0 ; 
@@ -85,7 +91,7 @@ int main(int argc, char** argv){
             x = x + dx;
         
         }
-        Uf = BiCGstab( Nx,  Ny,  dx,  dy,  xmin,  xmax,  dt,  V,  eProd_scailon,  Nmax );
+        Uf = BiCGstab( Nx,  Ny,  dx,  dy,  xmin,  xmax,  dt,  V,  eProd_scailon,  Nmax, C, Me, Np);
 
         j = j + 1;
 

@@ -3,6 +3,6 @@
 
 using namespace std;
 
-void charge_a(int& me, int& n, int& Np, int& iBeg, int& iEnd);
+void charge_a(int me, int n, int Np, int& iBeg, int& iEnd);
 
 #endif

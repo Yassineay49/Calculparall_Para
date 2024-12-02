@@ -31,7 +31,7 @@ double calculateNorm(std::vector<double>& vec) {
 
 
 //Voici Bicg pour le code séquentiel 
-vector<double> BiCGstab(int Nx, int Ny, double dx, double dy, double xmin, double ymin, double dt, vector<double>& b, double eProd_scailon, int Nmax )
+vector<double> BiCGstab(int Nx, int Ny, double dx, double dy, double xmin, double ymin, double dt, vector<double>& b, double eProd_scailon, int Nmax, double C, int& Me, int& Np )
 {
     int n = b.size();
     vector<double> x(n, 0.0); // Initialiser x avec des zéros
@@ -39,7 +39,7 @@ vector<double> BiCGstab(int Nx, int Ny, double dx, double dy, double xmin, doubl
     double rho0, alpha, omega, rho1, beta;
 
     // Calculer r0 = b - Ax0 avec x0 = 0
-    vector<double> Ax_0 = produitmatvect(Nx, Ny, dx, dy, xmin, ymin, dt, x);
+    vector<double> Ax_0 = produitmatvect(Nx, Ny, dx, dy, xmin, ymin, dt, x, C, Me, Np);
     for (int i = 0; i < n; ++i) {
         r[i] = b[i] - Ax_0[i];
     }
@@ -50,7 +50,7 @@ vector<double> BiCGstab(int Nx, int Ny, double dx, double dy, double xmin, doubl
 
     for (int k = 0; k < Nmax; k++) {
         // Calculer v = A * p
-        v = produitmatvect(Nx, Ny, dx, dy, xmin, ymin, dt, p);
+        v = produitmatvect(Nx, Ny, dx, dy, xmin, ymin, dt, p, C, Me, Np);
         alpha = rho0 / Prod_sca(r_tilde, v);
 
         // Calculer h = x + alpha * p
@@ -70,7 +70,7 @@ vector<double> BiCGstab(int Nx, int Ny, double dx, double dy, double xmin, doubl
         }
 
         // Calculer t = A * s
-        t = produitmatvect(Nx, Ny, dx, dy, xmin, ymin, dt, s);
+        t = produitmatvect(Nx, Ny, dx, dy, xmin, ymin, dt, s, C, Me ,Np);
         omega = Prod_sca(t, s) / Prod_sca(t, t);
 
         // Calculer x = h + omega * s
