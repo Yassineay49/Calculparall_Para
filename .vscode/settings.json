@@ -1,5 +1,9 @@
 {
     "files.associations": {
+<<<<<<< HEAD
+=======
+        "iostream": "cpp",
+>>>>>>> c73c8bc (Ajout du dossier Calcul_Parallele_final)
         "cctype": "cpp",
         "clocale": "cpp",
         "cmath": "cpp",
@@ -37,7 +41,10 @@
         "fstream": "cpp",
         "initializer_list": "cpp",
         "iosfwd": "cpp",
+<<<<<<< HEAD
         "iostream": "cpp",
+=======
+>>>>>>> c73c8bc (Ajout du dossier Calcul_Parallele_final)
         "istream": "cpp",
         "limits": "cpp",
         "new": "cpp",

@@ -12,12 +12,17 @@ set palette defined ( 0 '#F7FBFF',\
 set terminal png
 
 # forcer l'étendue de la colorbar. A changer selon les cas.
+<<<<<<< HEAD
 set cbrange [-7:15]
+=======
+set cbrange [-0:0.12]
+>>>>>>> c73c8bc (Ajout du dossier Calcul_Parallele_final)
 
 # force la mise à l'échelle des axes.
 set size ratio -1
 
 # si affichage 3D, force l'étendue de l'axe des z. A changer selon les cas.
+<<<<<<< HEAD
 set zrange [-7:15]
 # si affichage 3D, fixe le point de vue. A changer selon les cas.
 set view 48,132
@@ -33,6 +38,23 @@ do for [i = 0:198] {
     ## plot "./sol.".i.".dat" u 1:2:3 palette with image
     ## fait un affichage en 3D et en couleur
     splot "./sol.".i.".dat" u 1:2:3 palette
+=======
+set zrange [-0:0.12]
+# si affichage 3D, fixe le point de vue. A changer selon les cas.
+set view 48,132
+
+do for [i = 1:198] {
+    t=i*0.01
+    # si sauvegarde en png, force le nom du fichier. A commenter sinon.
+    # %05d force à écrire le nombre avec 5 chiffres et ajouter des 0 si besoin.
+    set output "Sol.".sprintf("%05d", i).".png"
+    set title "t = ".sprintf("%f", t)." s"." (i = ".sprintf("%d", i).")"
+    show title
+    # fait un affichage 2D en couleur
+    ## plot "./Sol.".i.".dat" u 1:2:3 palette with image
+    ## fait un affichage en 3D et en couleur
+    splot "./Sol.".i.".dat" u 1:2:3 palette
+>>>>>>> c73c8bc (Ajout du dossier Calcul_Parallele_final)
     ## A décommenter si affichage classique, et à adapter pour gérer la vitesse d'affichage
     # pause 0.01
 }
