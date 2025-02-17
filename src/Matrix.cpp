@@ -13,234 +13,8 @@
 
 using namespace std;
 
-<<<<<<< HEAD
 
-std::vector<double> produitmatvect(int& Nx, int& Ny, double& dx, double& dy, double& xmin, double& ymin, double& dt,std::vector<double>& u, double& C, int& Me , int& Np ) {
-
-
-        std::vector<double> produit((Nx-1) * (Ny-1));
-
-        int num_elements = (Nx-1) * (Ny-1);
-
-
-
-        if (Me > 0 and Me < Np - 1 ){
- 
-
-            for (int i = 0; i < num_elements; i++) {
-
-                    double alpha = 1 + (2*dt)/(dx*dx) + (2*dt/dy*dy) ;
-                    double beta = -dt/(2*dx*dx) ;
-                    double gamma = -dt/(2*dy*dy) ; 
-
-                    if ( i < Nx-1)
-                    {
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma) *u[i] + beta*u[i+1] + 2*gamma * u[i+Nx-1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1] + 2*gamma * u[i+Nx-1] ;
-
-                        }
-                        else{
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1] + beta*u[i+1] + 2*gamma * u[i+Nx-1];
-
-                        }
-                    }
-
-                    if (i >= num_elements - Nx + 1)
-                    {
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i+1] + 2*gamma* u[i-Nx +1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1]  + 2*gamma* u[i-Nx +1] ;
-
-                        }
-                        else{
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1] + beta*u[i+1]  + 2*gamma* u[i-Nx +1] ;
-
-                        }
-                    }
-
-
-                    if (i >= Nx-1 and i < num_elements - Nx + 1 ){
-                        
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha)*u[i] + beta*u[i+1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha )*u[i] + beta*u[i-1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1];
-
-                        }
-                        else{
-                            produit[i] = (alpha)*u[i] + beta*u[i-1] + beta*u[i+1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1];
-
-                        }
-                    }
-                    
-                    
-                
-            }
-
-        return produit ;
-
-    }
-
-
-    if (Me == 0 ){
- 
-
-            for (int i = 0; i < num_elements; i++) {
-
-                    double alpha = 1 + (2*dt)/(dx*dx) + (2*dt/dy*dy) ;
-                    double beta = -dt/(2*dx*dx) ;
-                    double gamma = -dt/(2*dy*dy) ; 
-
-                    if ( i < Nx-1)
-                    {
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha ) *u[i] + beta*u[i+1] + gamma * u[i+Nx-1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha )*u[i] + beta*u[i-1] + gamma * u[i+Nx-1] ;
-
-                        }
-                        else{
-                            produit[i] = (alpha )*u[i] + beta*u[i-1] + beta*u[i+1] + gamma * u[i+Nx-1];
-
-                        }
-                    }
-
-                    if (i >= num_elements - Nx + 1)
-                    {
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i+1] + 2*gamma* u[i-Nx +1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1]  + 2*gamma* u[i-Nx +1] ;
-
-                        }
-                        else{
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1] + beta*u[i+1]  + 2*gamma* u[i-Nx +1] ;
-
-                        }
-                    }
-
-
-                    if (i >= Nx-1 and i < num_elements - Nx + 1 ){
-                        
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha)*u[i] + beta*u[i+1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha )*u[i] + beta*u[i-1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1];
-
-                        }
-                        else{
-                            produit[i] = (alpha)*u[i] + beta*u[i-1] + beta*u[i+1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1];
-
-                        }
-                    }
-                    
-                    
-                
-            }
-
-        return produit ;
-
-    }
-
-
-    if (Me > 0 and Me < Np - 1 ){
- 
-
-            for (int i = 0; i < num_elements; i++) {
-
-                    double alpha = 1 + (2*dt)/(dx*dx) + (2*dt/dy*dy) ;
-                    double beta = -dt/(2*dx*dx) ;
-                    double gamma = -dt/(2*dy*dy) ; 
-
-                    if ( i < Nx-1)
-                    {
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma) *u[i] + beta*u[i+1] + 2*gamma * u[i+Nx-1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1] + 2*gamma * u[i+Nx-1] ;
-
-                        }
-                        else{
-                            produit[i] = (alpha - C * gamma)*u[i] + beta*u[i-1] + beta*u[i+1] + 2*gamma * u[i+Nx-1];
-
-                        }
-                    }
-
-                    if (i >= num_elements - Nx + 1)
-                    {
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha )*u[i] + beta*u[i+1] + gamma* u[i-Nx +1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha )*u[i] + beta*u[i-1]  + gamma* u[i-Nx +1] ;
-
-                        }
-                        else{
-                            produit[i] = (alpha )*u[i] + beta*u[i-1] + beta*u[i+1]  + gamma* u[i-Nx +1] ;
-
-                        }
-                    }
-
-
-                    if (i >= Nx-1 and i < num_elements - Nx + 1 ){
-                        
-                        if ((i) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha)*u[i] + beta*u[i+1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1] ;
-                            
-                        }
-                        else if ((i+1) % (Nx-1) == 0) {
-                            
-                            produit[i] = (alpha )*u[i] + beta*u[i-1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1];
-
-                        }
-                        else{
-                            produit[i] = (alpha)*u[i] + beta*u[i-1] + beta*u[i+1] + gamma * u[i+Nx-1] + gamma* u[i-Nx +1];
-
-                        }
-                    }
-                    
-                    
-                
-            }
-
-        return produit ;
-
-=======
+// Fonction pour déterminer la taille de la portion de données pour chaque processus MPI
 int size_proc(int rank,int ibeg,int iend,int nr,int  nproc)
 {
 
@@ -257,49 +31,12 @@ int size_proc(int rank,int ibeg,int iend,int nr,int  nproc)
     else
     {
        return (iend-ibeg+2*nr+1);
->>>>>>> c73c8bc (Ajout du dossier Calcul_Parallele_final)
     }
 }
 
 
-<<<<<<< HEAD
-std::vector<double> Source_term(int& Nx, int& Ny, double& dx, double& dy, double& xmin, double& ymin,double& xmax, double& ymax, double& t, double& dt,int& cas, double& C, std::vector<double>& vec1, std::vector<double>& vec2, std::vector<double>& vec3, int& Me, int& Np) {
 
-    std::vector<double> B((Nx-1) * (Ny-1),0.0);
-    int pas = 0;
-    double y,x ;
-
-    double beta = -dt/(2*dx*dx) ;
-    double gamma = -dt/(2*dy*dy) ;
-
-
-    for (int j = 0; j < Ny - 1; ++j) {
-        y = ymin + (j+1) * dy;
-        for (int i = 0; i < Nx - 1; ++i) {
-            x = xmin + (i+1) * dx;
-            if (i==0){
-                B[pas] += beta * g(0,y,t,cas) ;
-                
-            }
-            if (j==0){
-                B[pas] +=  gamma * (vec1[i]  - vec3[i] + (C*vec2[i])) ;
-            }
-            if (i==Nx-2){
-                B[pas] += beta * g(xmax,y,t,cas) ;
-            }
-            if (j==Ny-2){
-                B[pas] += gamma * h(x,ymax,t,cas) ; 
-                
-            }
-            pas = pas + 1;
-        }
-    }
-
-    return B;
-}
-=======
-
-
+// Fonction pour effectuer le produit matrice-vecteur pour Np == 1
 std::vector<double> produitmatvect(double a,double b,double c,std::vector<double>& x,int n,int m)
 {
      std::vector<double> y(n * m);
@@ -339,7 +76,7 @@ std::vector<double> produitmatvect(double a,double b,double c,std::vector<double
     return y;
 }
 
-
+// Fonction pour effectuer le produit matrice-vecteur pour Np > 1
 std::vector<double> produitmatvect1(double a,double b,double c,std::vector<double>& x,int n,int m,double dy, double D, double dt, double alpha,double beta,int rank,int nproc )
 {
 
@@ -347,9 +84,8 @@ std::vector<double> produitmatvect1(double a,double b,double c,std::vector<doubl
     std::vector<double> y(n * m);
 
 
-
+    // Produit matrice-vecteur pour les Conditions de raccord de Dirichlet
     if (alpha == 0){
-
 
      for(int i=0;i<n*m;i++)
      {
@@ -386,6 +122,7 @@ std::vector<double> produitmatvect1(double a,double b,double c,std::vector<doubl
     return y;
     }
 
+    // Produit matrice-vecteur pour les Conditions de raccord de Robin
 
     else {
         double coeff1=a+((2*beta*D*dt)/(alpha*dy));
@@ -551,11 +288,10 @@ int taille(int rank,int ibeg,int iend,int nr,int nproc)
 }
 
 
-
+// Source terme pour les Conditions de raccord de Dirichlet
 std::vector<double> SOURCE0(double D,double dy,double dx,double dt,double t,double Lx,double Ly,int Nx,int Ny,std::vector<double>& x,std::vector<double>& y,std::vector<double>& u ,int cas,int ibeg,int iend,int nproc,int rank,int nr,std::vector<double>& stencil1,std::vector<double>& stencil2)
 {
-    
-    
+ 
     int i,j,I;
       
         int N;
@@ -691,7 +427,7 @@ std::vector<double> SOURCE0(double D,double dy,double dx,double dt,double t,doub
 
 }
 
-
+// Source terme pour les Conditions de raccord de Robin
 std::vector<double> SOURCE1(double D,double dy,double dx,double dt,double t,double Lx,
 double Ly,int Nx,int Ny,std::vector<double>& x,std::vector<double>& y,std::vector<double>& u ,int cas,int iBeg,int iEnd,int Np,int rank,
 int r,double alpha,double beta,std::vector<double>& stencil1, std::vector<double> stencil2)
@@ -896,7 +632,7 @@ int r,double alpha,double beta,std::vector<double>& stencil1, std::vector<double
     }
 
 
-// Si Np == 1
+// Source terme pour Np ==1
 std::vector<double> SOURCESEQ(double D,double dy,double dx,double dt,double t,double Lx,
 double Ly,int Nx,int Ny,std::vector<double>& x,std::vector<double>& y,std::vector<double>& u ,int cas,int iBeg,int iEnd,int Np,int rank)
 {
@@ -969,7 +705,7 @@ double Ly,int Nx,int Ny,std::vector<double>& x,std::vector<double>& y,std::vecto
    
     }
 
-
+// Produit matrice-vecteur pour Np == 1
 std::vector<double> produitmatvectSEQ(double a,double b,double c,std::vector<double>& x,int n,int m,double dy, double D, double dt )
 {
 
@@ -1010,4 +746,3 @@ std::vector<double> produitmatvectSEQ(double a,double b,double c,std::vector<dou
     return y;
 
 }
->>>>>>> c73c8bc (Ajout du dossier Calcul_Parallele_final)

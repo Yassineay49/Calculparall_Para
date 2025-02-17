@@ -1,34 +1,65 @@
 cmake_minimum_required(VERSION 3.0)
+project(CHP)
 
-set(CXX_STANDARD_REQUIRED On)
-set(CXX_STANDARD C++11)
+# Configuration C++11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Chemins des bibliothèques
 set(LIBRARY_PATH_EIGEN "../../../libraries/eigen/")
 
-# Spécifie les options passées au compilateur. Ici : l'optimisation du code binaire et les warnings.
+# Options de compilation
 set(CMAKE_CXX_FLAGS "-Wall")
-# set(CMAKE_CXX_FLAGS_DEBUG "-g") # Les paramètres par défaut: décommentez si vous voulez les changer
-# set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG") # Les paramètres par défaut: décommentez si vous voulez les changer
-
-# Options diverses de CMake, à ne pas modifier.
-set(CMAKE_SKIP_INSTALL_RULES True)
-
-# Décommentez la ligne que vous souhaitez, puis recompilez.
 set(CMAKE_BUILD_TYPE "Debug")
 #set(CMAKE_BUILD_TYPE "Release")
 
-# Options spécifiques à ce projet.
-project(CHP)
-
-# Liste exhaustive des fichiers à compiler ensemble.
-set(PROJECT_COMPILATION_FILE_LIST settings.cpp charge.cpp functions.cpp Matrix.cpp solver.cpp main.cpp)
-
-# Précise que l'exécutable sera à assembler avec ces fichiers compilés.
-add_executable(${PROJECT_NAME} ${PROJECT_COMPILATION_FILE_LIST})
-
-# Ajoute les répertoires des bibliothèques liées, ici Eigen et les petites biblio locales au projet.
-target_include_directories(${PROJECT_NAME} PUBLIC "${LIBRARY_PATH_EIGEN}" "src/libraries")
-
-# Spécifie les bibliothèques MPI à inclure lors de la liaison du programme.
+# Trouver MPI
 find_package(MPI REQUIRED)
+
+# Définir les chemins des sources
+set(SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+
+# Liste des fichiers sources
+set(PROJECT_SOURCES
+    ${SRC_DIR}/settings.cpp
+    ${SRC_DIR}/charge.cpp
+    ${SRC_DIR}/functions.cpp
+    ${SRC_DIR}/Matrix.cpp
+    ${SRC_DIR}/solver.cpp
+    ${PROJECT_SOURCE_DIR}/main.cpp
+)
+
+# Créer la bibliothèque pour les tests
+add_library(solver_lib
+    ${SRC_DIR}/settings.cpp
+    ${SRC_DIR}/charge.cpp
+    ${SRC_DIR}/functions.cpp
+    ${SRC_DIR}/Matrix.cpp
+    ${SRC_DIR}/solver.cpp
+)
+
+# Configurer la bibliothèque
+target_include_directories(solver_lib PUBLIC 
+    ${SRC_DIR}
+    ${LIBRARY_PATH_EIGEN}
+    "src/libraries"
+)
+target_link_libraries(solver_lib PUBLIC MPI::MPI_CXX)
+
+# Créer l'exécutable principal
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+
+# Configurer l'exécutable
+target_include_directories(${PROJECT_NAME} PUBLIC 
+    ${SRC_DIR}
+    ${LIBRARY_PATH_EIGEN}
+    "src/libraries"
+)
 target_link_libraries(${PROJECT_NAME} PUBLIC MPI::MPI_CXX)
+
+# Créer les dossiers pour les résultats et données
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/results)
+file(MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data)
+
+# Ajouter le sous-répertoire des tests
+add_subdirectory(tests)
