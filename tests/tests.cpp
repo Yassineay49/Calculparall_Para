@@ -2,10 +2,10 @@
 #include <mpi.h>
 #include <fstream>
 #include <iostream>
-#include "Matrix.h"
-#include "solver.h"
-#include "functions.h"
-#include "settings.h"
+#include "../src/Matrix.h"
+#include "../src/solver.h"
+#include "../src/functions.h"
+#include "../src/settings.h"
 #include <cmath>
 #include <vector>
 
