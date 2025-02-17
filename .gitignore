@@ -1,0 +1,10 @@
+# Ignorer le dossier build
+build/
+
+# Ignorer les fichiers de configuration spécifiques
+*.log
+node_modules/
+.env
+
+# Ignorer un type de fichier spécifique
+*.tmp
