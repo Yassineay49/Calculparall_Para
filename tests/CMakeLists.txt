@@ -1,39 +1,29 @@
-# Version minimale de CMake requise
-cmake_minimum_required(VERSION 3.10)
+# Fichier CMakeLists.txt pour le dossier tests/
+cmake_policy(SET CMP0079 NEW)
 
-# Définir le projet
-project(TestSolver)
-
-# Trouver MPI, GTest et Threads
-find_package(MPI REQUIRED)
+# Configuration pour les tests
 find_package(GTest REQUIRED)
-find_package(Threads REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
 
-# Comme libsolver_lib.a se trouve dans le dossier parent, on définit une variable pour le chemin
-set(PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/..)
-
-# Ajoute le répertoire parent aux répertoires de recherche de l'éditeur de liens
-link_directories(${PARENT_DIR})
-
-# Créer l'exécutable des tests
-add_executable(tests tests.cpp)
-
-# Lier les bibliothèques nécessaires
-target_link_libraries(tests
-    solver_lib       # Cible trouvée grâce à link_directories
-    MPI::MPI_CXX     # Assurez-vous que MPI est bien installé
-    GTest::GTest
-    GTest::Main
-    Threads::Threads
+# Création de l'exécutable de test avec un nom différent
+add_executable(run_tests tests.cpp)
+target_link_libraries(run_tests 
+    solver_lib
+    ${GTEST_LIBRARIES}
+    ${GTEST_MAIN_LIBRARIES}
+    pthread
+    MPI::MPI_CXX
 )
 
-# Activer les tests
-enable_testing()
-add_test(NAME solver_tests COMMAND tests)
-
-# Copier les fichiers de données nécessaires pour les tests (depuis le dossier parent)
-file(COPY ${PARENT_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
-# Créer le dossier results
+# S'assurer que les dossiers de résultats existent
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/results)
 
+# Donner les permissions d'écriture au dossier results
+execute_process(COMMAND chmod -R 777 ${CMAKE_CURRENT_BINARY_DIR}/results)
+
+# Créer une cible de nettoyage pour les tests uniquement
+add_custom_target(clean_tests
+    COMMAND ${CMAKE_COMMAND} -E remove run_tests
+    COMMAND ${CMAKE_COMMAND} -E remove_directory results
+    COMMAND ${CMAKE_COMMAND} -E echo "Tests cleaned"
+)
