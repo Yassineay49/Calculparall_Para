@@ -440,8 +440,6 @@ TEST(Test13_RobinBoundary, MatrixOperation) {
     EXPECT_FALSE(all_same);
 }
 
-
-
 // Test 15: Test de robustesse numérique
 TEST(Test15_NumericalStability, SourceTerms) {
     double D = 1.0;
